@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المصحف الذهبي</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--gold:#c9a227;
+--gold-dark:#8b6508;
+--bg:#f7f2e7;
+--card:#ffffff;
+--text:#222;
+--shadow:0 5px 20px rgba(0,0,0,.1);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Cairo',sans-serif;
+background:linear-gradient(135deg,#fdfbf7,#f3e5ab);
+color:var(--text);
+padding:15px;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+header{
+background:linear-gradient(135deg,var(--gold-dark),var(--gold));
+padding:30px;
+border-radius:20px;
+color:white;
+text-align:center;
+margin-bottom:20px;
+box-shadow:var(--shadow);
+}
+
+header h1{
+font-size:2.3rem;
+margin-bottom:10px;
+}
+
+header p{
+opacity:.9;
+}
+
+.card{
+background:var(--card);
+border-radius:18px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:var(--shadow);
+}
+
+.prayer-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(100px,1fr));
+gap:10px;
+margin-top:15px;
+}
+
+.prayer{
+background:#fff9e8;
+padding:15px;
+border-radius:12px;
+text-align:center;
+border:1px solid #f0d98a;
+}
+
+.prayer h3{
+font-size:1rem;
+margin-bottom:5px;
+color:#666;
+}
+
+.prayer p{
+font-size:1.2rem;
+font-weight:bold;
+color:var(--gold-dark);
+}
+
+#nextPrayer{
+margin-top:15px;
+font-size:1.1rem;
+font-weight:bold;
+text-align:center;
+color:#c0392b;
+}
+
+.search{
+width:100%;
+padding:15px;
+border-radius:12px;
+border:2px solid var(--gold);
+font-size:1rem;
+margin-bottom:20px;
+outline:none;
+font-family:'Cairo',sans-serif;
+}
+
+.surah{
+background:white;
+padding:25px;
+border-radius:18px;
+margin-bottom:20px;
+box-shadow:var(--shadow);
+transition:.3s;
+}
+
+.surah:hover{
+transform:translateY(-5px);
+}
+
+.surah-title{
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:2px solid #f3e5ab;
+padding-bottom:10px;
+margin-bottom:15px;
+}
+
+.surah-title h2{
+color:var(--gold-dark);
+}
+
+.surah-title span{
+background:#f3e5ab;
+padding:5px 12px;
+border-radius:20px;
+font-size:.9rem;
+}
+
+.basmala{
+text-align:center;
+font-size:1.5rem;
+margin-bottom:20px;
+color:var(--gold-dark);
+font-weight:bold;
+}
+
+.ayahs{
+font-size:1.5rem;
+line-height:2.5;
+}
+
+.ayah-number{
+background:#f3e5ab;
+padding:3px 10px;
+border-radius:50%;
+font-size:1rem;
+margin:0 5px;
+color:var(--gold-dark);
+}
+
+audio{
+width:100%;
+margin-top:20px;
+}
+
+.loading{
+text-align:center;
+padding:40px;
+font-size:1.3rem;
+color:var(--gold-dark);
+font-weight:bold;
+}
+
+.install-btn{
+background:linear-gradient(135deg,var(--gold-dark),var(--gold));
+border:none;
+padding:15px;
+width:100%;
+border-radius:12px;
+font-size:1rem;
+font-weight:bold;
+color:white;
+cursor:pointer;
+margin-bottom:20px;
+}
+
+@media(max-width:768px){
+
+header h1{
+font-size:1.8rem;
+}
+
+.ayahs{
+font-size:1.3rem;
+line-height:2.2;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+<h1>📖 المصحف الذهبي</h1>
+<p>القرآن الكريم والمؤذن الإلكتروني</p>
+</header>
+
+<button class="install-btn" id="installBtn">
+📲 تثبيت التطبيق على الهاتف
+</button>
+
+<div class="card">
+
+<h2 style="text-align:center;color:#8b6508;">
+🕌 مواقيت الصلاة
+</h2>
+
+<div class="prayer-grid">
+
+<div class="prayer">
+<h3>الفجر</h3>
+<p id="fajr">--:--</p>
+</div>
+
+<div class="prayer">
+<h3>الشروق</h3>
+<p id="sunrise">--:--</p>
+</div>
+
+<div class="prayer">
+<h3>الظهر</h3>
+<p id="dhuhr">--:--</p>
+</div>
+
+<div class="prayer">
+<h3>العصر</h3>
+<p id="asr">--:--</p>
+</div>
+
+<div class="prayer">
+<h3>المغرب</h3>
+<p id="maghrib">--:--</p>
+</div>
+
+<div class="prayer">
+<h3>العشاء</h3>
+<p id="isha">--:--</p>
+</div>
+
+</div>
+
+<div id="nextPrayer">
+جاري تحميل المواقيت...
+</div>
+
+</div>
+
+<input type="text" class="search" id="search" placeholder="🔍 ابحث عن سورة">
+
+<div id="loading" class="loading">
+جاري تحميل القرآن الكريم...
+</div>
+
+<div id="quran"></div>
+
+</div>
+
+<script>
+
+let allSurahs = [];
+
+async function loadPrayerTimes(){
+
+if(navigator.geolocation){
+
+navigator.geolocation.getCurrentPosition(async(pos)=>{
+
+const lat = pos.coords.latitude;
+const lng = pos.coords.longitude;
+
+try{
+
+const res = await fetch(
+`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=5`
+);
+
+const data = await res.json();
+
+const t = data.data.timings;
+
+document.getElementById('fajr').textContent=t.Fajr;
+document.getElementById('sunrise').textContent=t.Sunrise;
+document.getElementById('dhuhr').textContent=t.Dhuhr;
+document.getElementById('asr').textContent=t.Asr;
+document.getElementById('maghrib').textContent=t.Maghrib;
+document.getElementById('isha').textContent=t.Isha;
+
+document.getElementById('nextPrayer').textContent =
+"تم تحميل مواقيت الصلاة بنجاح";
+
+}catch(e){
+
+document.getElementById('nextPrayer').textContent =
+"تعذر تحميل المواقيت";
+
+}
+
+});
+
+}
+
+}
+
+async function loadQuran(){
+
+try{
+
+const res = await fetch(
+'https://api.alquran.cloud/v1/quran/quran-uthmani'
+);
+
+const data = await res.json();
+
+allSurahs = data.data.surahs;
+
+displaySurahs(allSurahs);
+
+document.getElementById('loading').style.display='none';
+
+}catch(e){
+
+document.getElementById('loading').textContent =
+'حدث خطأ أثناء تحميل القرآن';
+
+}
+
+}
+
+function displaySurahs(surahs){
+
+const quran = document.getElementById('quran');
+
+quran.innerHTML='';
+
+surahs.forEach(surah=>{
+
+const div = document.createElement('div');
+
+div.className='surah';
+
+const ayahs = surah.ayahs.map(a=>
+`${a.text} <span class="ayah-number">${a.numberInSurah}</span>`
+).join(' ');
+
+div.innerHTML=`
+
+<div class="surah-title">
+<h2>${surah.name}</h2>
+<span>${surah.numberOfAyahs} آية</span>
+</div>
+
+${surah.number !== 9 ? `
+<div class="basmala">
+بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+</div>
+` : ''}
+
+<div class="ayahs">
+${ayahs}
+</div>
+
+`;
+
+quran.appendChild(div);
+
+});
+
+}
+
+document.getElementById('search')
+.addEventListener('input',(e)=>{
+
+const value = e.target.value.trim();
+
+const filtered = allSurahs.filter(s=>
+s.name.includes(value)
+);
+
+displaySurahs(filtered);
+
+});
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt',(e)=>{
+
+e.preventDefault();
+
+deferredPrompt = e;
+
+});
+
+document.getElementById('installBtn')
+.addEventListener('click',async()=>{
+
+if(deferredPrompt){
+
+deferredPrompt.prompt();
+
+}
+
+});
+
+loadPrayerTimes();
+loadQuran();
+
+</script>
+
+</body>
+</html>
